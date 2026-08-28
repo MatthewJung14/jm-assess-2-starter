@@ -9,7 +9,28 @@ public class CollectionsSkills
     /// 'Hello' and 'hello' are two different words as well.
     public static Dictionary<string, int> CountWords(string text)
     {
-        return new Dictionary<string, int>();
+        var wordCount = new Dictionary<string, int>();
+
+        // Get all words in the text and put them into an array. 
+        string[] words = text.Split(
+            new char[] { ' ' },
+            StringSplitOptions.RemoveEmptyEntries
+        );
+
+        // If the word is already in the dictionary, increment the count.
+        // Else, add the word into the dictionary. 
+        foreach (string word in words)
+        {
+            if (wordCount.ContainsKey(word))
+            {
+                wordCount[word]++;
+            } else
+            {
+                wordCount.Add(word, 1);
+            }
+        }
+
+        return wordCount;
     }
 
     // Do not modify the code between the "==========" lines.
@@ -36,7 +57,17 @@ public class CollectionsSkills
     /// an empty list.
     public static List<string> GetMelonTypesAtPrice(double price)
     {
-        return new List<string>();
+        var melonsAtPrice = new List<string>();
+
+        foreach (var melon in _melons)
+        {
+            if (melon.Price == price)
+            {
+                melonsAtPrice.Add(melon.Type);
+            }
+        }
+        
+        return melonsAtPrice;
     }
 
     // Do not modify the code between the "==========" lines.
@@ -69,7 +100,35 @@ public class CollectionsSkills
     /// only consist of lowercased letters.
     public static string TranslateToPirate(string englishText)
     {
-        return "";
+        string[] englishWords = englishText.Split(
+            new char[] { ' ' },
+            StringSplitOptions.RemoveEmptyEntries
+        );
+
+        string translatedToPirate = "";
+
+        // Check to see if the words are in _engToPirate. 
+        // If they are, append the words to the result. 
+        foreach (var word in englishWords)
+        {
+            if (_engToPirate.ContainsKey(word))
+            {
+                translatedToPirate += _engToPirate[word];
+            }
+            else
+            {
+                translatedToPirate += word;
+            }
+            translatedToPirate += " ";
+        }
+
+        // Remove the extra space at the end. 
+        if (translatedToPirate.Length > 0)
+        {
+            translatedToPirate = translatedToPirate.Substring(0, translatedToPirate.Length - 1);
+        }
+
+        return translatedToPirate;
     }
 
     /// Return a sequence of words arranged according to the rules below.
@@ -99,6 +158,34 @@ public class CollectionsSkills
     /// find words that'll fit the pattern.
     public static List<string> CreateWordChain(List<string> words)
     {
-        return new List<string>();
+        var wordChain = new List<string> { words[0] };
+        words.RemoveAt(0);
+
+        while (words.Count > 0)
+        {
+            var lastLetter = wordChain[^1].Last();
+            var matchIndex = -1;
+
+            // Find the first word that starts with the required letter. 
+            for (var j = 0; j < words.Count; j++)
+            {
+                if (words[j].First() == lastLetter)
+                {
+                    matchIndex = j;
+                    break;
+                }
+            }
+
+            // The chain can't grow any further because no word starts with the required letter.
+            if (matchIndex == -1)
+            {
+                break;
+            }
+
+            wordChain.Add(words[matchIndex]);
+            words.RemoveAt(matchIndex);
+        }
+
+        return wordChain;
     }
 }
